@@ -1,0 +1,206 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/authentication_token":
+    post:
+      summary: generates authentication_token
+      tags:
+      - Authentication
+      responses:
+        '200':
+          description: endpoint created
+          content:
+            application/json:
+              example:
+                Authentication: eyJhbGciOiJIUzI1NiJ9.eyJBdXRoZW50aWNhdGlvbiI6IjA5ZjVkYWMwLTU2YzAtNDE1Mi04YTZiLWEyZTRlYzY5ODk2MSIsImV4cCI6MTYyMDgzODExOX0
+  "/endpoints":
+    get:
+      summary: list endpoints
+      tags:
+      - Endpoints
+      parameters:
+      - in: header
+        name: Authentication
+        require: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Lists Endpoints
+          content:
+            application/json:
+              example:
+                data:
+                - id: e33860a4-05c4-420c-b6f0-3a7337e8999f
+                  type: endpoints
+                  attributes:
+                    verb: GET
+                    path: "/foo"
+                    response:
+                      code: 200
+                      headers: {}
+                      body: '{"message":"Hello world"}'
+    post:
+      summary: creates endpoint
+      tags:
+      - Endpoints
+      parameters:
+      - in: header
+        name: Authentication
+        require: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: endpoint created
+          content:
+            application/json:
+              example:
+                data:
+                  id: e33860a4-05c4-420c-b6f0-3a7337e8999f
+                  type: endpoints
+                  attributes:
+                    verb: GET
+                    path: "/foo"
+                    response:
+                      code: 200
+                      headers: {}
+                      body: '{"message":"Hello world"}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    attributes:
+                      type: object
+                      properties:
+                        verb:
+                          type: string
+                        path:
+                          type: string
+                        response:
+                          type: object
+                          properties:
+                            code:
+                              type: integer
+                            headers:
+                              type: object
+                            body:
+                              type: object
+              required:
+              - verb
+              - path
+              - response
+  "/endpoints/{id}":
+    put:
+      summary: updates endpoint
+      tags:
+      - Endpoints
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authentication
+        require: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: endpoint updated
+          content:
+            application/json:
+              example:
+                data:
+                  id: e33860a4-05c4-420c-b6f0-3a7337e8999f
+                  type: endpoints
+                  attributes:
+                    verb: GET
+                    path: "/foo"
+                    response:
+                      code: 200
+                      headers: {}
+                      body: '{"message":"Hello world"}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    attributes:
+                      type: object
+                      properties:
+                        verb:
+                          type: string
+                        path:
+                          type: string
+                        response:
+                          type: object
+                          properties:
+                            code:
+                              type: integer
+                            headers:
+                              type: object
+                            body:
+                              type: object
+              required:
+              - verb
+              - path
+              - response
+    delete:
+      summary: delete endpoint
+      tags:
+      - Endpoints
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: Authentication
+        require: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+  "/{path}":
+    get:
+      summary: requests the recently created endpoint
+      parameters:
+      - name: path
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: requests the recently created endpoint
+          content:
+            application/json:
+              example:
+                message: Hello world
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
