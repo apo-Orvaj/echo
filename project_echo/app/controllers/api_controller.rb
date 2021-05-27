@@ -1,5 +1,6 @@
 require 'json_web_token'
 
+# Api Controller
 class ApiController < ActionController::Base
   skip_before_action :verify_authenticity_token
 
